@@ -24,14 +24,10 @@ namespace Perceptron
         public Vector pesos;
         public float learningRate, bias;
 
-        public Perceptron()
+        public Perceptron(Vector pesos, float bias)
         {
-            Random temp = new Random();
-            pesos = new Vector(_x: (float)(temp.Next(11)+temp.NextDouble()), _y: (float)(temp.Next(11)+temp.NextDouble()));
-            if (temp.Next(2) == 0 ) pesos.x *= -1;
-            if (temp.Next(2) == 0) pesos.y *= -1;
-            bias = (float)(temp.Next(11) + temp.NextDouble());
-            if (temp.Next(2) == 0) bias *= -1;
+            this.pesos = pesos;
+            this.bias = bias;
         }
 
         public int Supocision(Vector entrada)
