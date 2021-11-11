@@ -29,9 +29,9 @@ namespace Perceptron
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.graficoError = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.tablaSeparacion = new System.Windows.Forms.TableLayoutPanel();
@@ -47,6 +47,7 @@ namespace Perceptron
             this.nudLR = new System.Windows.Forms.NumericUpDown();
             this.IniciarPesos = new System.Windows.Forms.Button();
             this.picbox = new System.Windows.Forms.PictureBox();
+            this.button1 = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.graficoError)).BeginInit();
             this.tablaSeparacion.SuspendLayout();
@@ -74,18 +75,18 @@ namespace Perceptron
             // 
             // graficoError
             // 
-            chartArea1.Name = "ChartArea1";
-            this.graficoError.ChartAreas.Add(chartArea1);
+            chartArea3.Name = "ChartArea1";
+            this.graficoError.ChartAreas.Add(chartArea3);
             this.graficoError.Dock = System.Windows.Forms.DockStyle.Fill;
-            legend1.Name = "Legend1";
-            this.graficoError.Legends.Add(legend1);
+            legend3.Name = "Legend1";
+            this.graficoError.Legends.Add(legend3);
             this.graficoError.Location = new System.Drawing.Point(3, 363);
             this.graficoError.Name = "graficoError";
             this.graficoError.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.SeaGreen;
-            series1.ChartArea = "ChartArea1";
-            series1.Legend = "Legend1";
-            series1.Name = "Series1";
-            this.graficoError.Series.Add(series1);
+            series3.ChartArea = "ChartArea1";
+            series3.Legend = "Legend1";
+            series3.Name = "Series1";
+            this.graficoError.Series.Add(series3);
             this.graficoError.Size = new System.Drawing.Size(794, 84);
             this.graficoError.TabIndex = 8;
             this.graficoError.Text = "chart1";
@@ -108,6 +109,7 @@ namespace Perceptron
             // 
             // pnlParametros
             // 
+            this.pnlParametros.Controls.Add(this.button1);
             this.pnlParametros.Controls.Add(this.label3);
             this.pnlParametros.Controls.Add(this.NUDError);
             this.pnlParametros.Controls.Add(this.btnAdaline);
@@ -138,7 +140,7 @@ namespace Perceptron
             // NUDError
             // 
             this.NUDError.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.NUDError.DecimalPlaces = 4;
+            this.NUDError.DecimalPlaces = 3;
             this.NUDError.Increment = new decimal(new int[] {
             1,
             0,
@@ -146,7 +148,7 @@ namespace Perceptron
             131072});
             this.NUDError.Location = new System.Drawing.Point(85, 66);
             this.NUDError.Maximum = new decimal(new int[] {
-            1,
+            9,
             0,
             0,
             65536});
@@ -154,7 +156,7 @@ namespace Perceptron
             1,
             0,
             0,
-            327680});
+            196608});
             this.NUDError.Name = "NUDError";
             this.NUDError.Size = new System.Drawing.Size(64, 20);
             this.NUDError.TabIndex = 2;
@@ -245,7 +247,7 @@ namespace Perceptron
             this.nudGen.Size = new System.Drawing.Size(64, 20);
             this.nudGen.TabIndex = 1;
             this.nudGen.Value = new decimal(new int[] {
-            100,
+            1000,
             0,
             0,
             0});
@@ -277,7 +279,7 @@ namespace Perceptron
             1,
             0,
             0,
-            196608});
+            65536});
             // 
             // IniciarPesos
             // 
@@ -300,6 +302,17 @@ namespace Perceptron
             this.picbox.TabIndex = 1;
             this.picbox.TabStop = false;
             this.picbox.MouseClick += new System.Windows.Forms.MouseEventHandler(this.picbox_MouseClick);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(73, 305);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 10;
+            this.button1.Text = "Prueba";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Visible = false;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // Form1
             // 
@@ -342,6 +355,7 @@ namespace Perceptron
         private System.Windows.Forms.PictureBox picbox;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.NumericUpDown NUDError;
+        private System.Windows.Forms.Button button1;
     }
 }
 

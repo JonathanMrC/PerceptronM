@@ -8,42 +8,45 @@ namespace Perceptron
 {
     public struct Elemento
     {
-        public Vector pos;
-        public float bias;
+        public List<double> caracteristicas;
         public int clase;
 
-        public Elemento(Vector posicion, int clase)
+        public Elemento(List<double> caracteristicas, int clase)
         {
-            pos = posicion;
+            this.caracteristicas = caracteristicas;
             this.clase = clase;
-            bias = 1;
         }
     }
     public class Perceptron
     {
-        public Vector pesos;
-        public float learningRate, bias;
+        public List<double> pesos;
+        public double learningRate;
 
-        public Perceptron(Vector pesos, float bias)
+        public Perceptron(List<double> pesos)
         {
             this.pesos = pesos;
-            this.bias = bias;
         }
 
-        public int Supocision(Vector entrada)
+        public int Supocision(List<double> entrada)
         {
-            return (pesos.x * entrada.x + pesos.y * entrada.y - bias) >= 0 ?  1 : 0;
+            double suma = 0;
+            for(int i = 0 ; i < pesos.Count;++i)
+                suma += pesos[i] * entrada[i];
+            return suma >= 0 ? 1 : -1;
         }
 
-        public void ActualizaPesos(float error, Vector entrada, float bias)
+        public void ActualizaPesos(double error, List<double> entrada)
         {
-            pesos += entrada* (error * learningRate);
-            this.bias += (error * learningRate * bias);
+            for(int i = 0; i < pesos.Count;++i)
+                pesos[i] += entrada[i]* (error * learningRate);
         }
 
-        public float evalua(float valor)
+        public double evalua(double x)
         {
-            return ((-pesos.x * valor) + bias) / pesos.y;
+            //w0x+w1y+w2b = 0
+            //w1y = -w0x-w2b
+            //y = (-w0x-w2b)/w1
+            return (-(pesos[0] * x) - (pesos[2] * -1)) / pesos[1];
         }
 
     }
