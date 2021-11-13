@@ -13,20 +13,20 @@ namespace Perceptron
     public partial class Form1 : Form
     {
         Graphics areaDibujo, areaFondo;
-        Random r;
-        List<float> centro, unidad;
-        Bitmap btmpD, btmpF;
-        const int radio = 10;
         bool entrenado, flagPesos;
+        List<Patron> patrones;
+        PointF centro, unidad;
+        const int radio = 10;
+        Bitmap btmpD, btmpF;
         Perceptron p, a;
-        List<Elemento> elementos;
+        Random r;
 
         public Form1()
         {
             InitializeComponent();
-            r = new Random(DateTime.Today.Millisecond);
+            r = new Random(DateTime.Now.Second *41 *DateTime.Now.Millisecond * 67);
             entrenado = flagPesos = false;
-            elementos = new List<Elemento>();
+            patrones = new List<Patron>();
             resizePic();
         }
 
@@ -39,7 +39,7 @@ namespace Perceptron
         void resizePic()
         {
 
-            centro = new List<float> { picbox.Width / 2, picbox.Height / 2 };
+            centro = new PointF ( picbox.Width / 2, picbox.Height / 2 );
 
             btmpD = new Bitmap(picbox.Width, picbox.Height);
             btmpF = new Bitmap(picbox.Width, picbox.Height);
@@ -50,42 +50,40 @@ namespace Perceptron
             picbox.BackgroundImage = btmpF;
             picbox.Image = btmpD;
 
-            DibujaEje(new List<float> { 10, 10 });
+            DibujaEje(new PointF ( 10, 10 ));
 
-            DibujaElementos();
+            DibujaPatron();
 
             DibujaRecta();
 
             picbox.Refresh();
         }
-        void DibujaElementos()
+        void DibujaPatron()
         {
-            foreach (Elemento e in elementos) {
-                List<float> aux = EsARe(new List<float> { (float)e.caracteristicas[0], (float)e.caracteristicas[1]});
-                if (e.clase == 1)
-                    areaFondo.FillRectangle(Brushes.Blue, aux[0] - radio, aux[1] - radio, radio * 2, radio * 2);
-                else
-                    areaFondo.FillEllipse(Brushes.Red, aux[0] - radio, aux[1] - radio, radio * 2, radio * 2);
+            foreach (Patron patron in patrones) {
+                PointF aux = EsARe(new PointF ((float)patron.atributo[0], (float)patron.atributo[1]));
+                if (patron.objetivo == 1) areaFondo.FillRectangle(Brushes.Blue, aux.X - radio, aux.Y - radio, radio * 2, radio * 2);
+                else areaFondo.FillEllipse(Brushes.Red, aux.X - radio, aux.Y - radio, radio * 2, radio * 2);
             }
         }
-        void DibujaEje(List<float> tamanio)//desde el negativo a caracteristicasitivo
+        void DibujaEje(PointF tamanio)//desde el negativo a atributoitivo
         {
             areaFondo.Clear(Color.White);
 
-            areaFondo.DrawLine(new Pen(Color.Black), 0, centro[1], picbox.Width, centro[1]);//eje x
-            areaFondo.DrawLine(new Pen(Color.Black), centro[0], 0, centro[0], picbox.Height);//eje y
+            areaFondo.DrawLine(new Pen(Color.Black), 0, centro.Y, picbox.Width, centro.Y);//eje x
+            areaFondo.DrawLine(new Pen(Color.Black), centro.X, 0, centro.X, picbox.Height);//eje y
 
-            unidad = new List<float> { picbox.Width / tamanio[0], picbox.Height / tamanio[1] };
+            unidad = new PointF ( picbox.Width / tamanio.X, picbox.Height / tamanio.Y );
 
-            for (int x = 0; x < (int)tamanio[0]; ++x)
+            for (int x = 0; x < (int)tamanio.X; ++x)
             {
-                areaFondo.DrawLine(new Pen(Color.DarkBlue), x * unidad[0], centro[1] - 10, x * unidad[0], centro[1] + 10);//lineas eje x
-                areaFondo.DrawString("" + (x - (tamanio[0] / 2)), new Font("Arial", 10, FontStyle.Italic), Brushes.DarkBlue, x * unidad[0], centro[1]);
+                areaFondo.DrawLine(new Pen(Color.DarkBlue), x * unidad.X, centro.Y - 10, x * unidad.X, centro.Y + 10);//lineas eje x
+                areaFondo.DrawString("" + (x - (tamanio.X / 2)), new Font("Arial", 10, FontStyle.Italic), Brushes.DarkBlue, x * unidad.X, centro.Y);
             }
-            for (int y = 1; y <= (int)tamanio[1]; ++y)
+            for (int y = 1; y <= (int)tamanio.Y; ++y)
             {
-                areaFondo.DrawLine(new Pen(Color.DarkBlue), centro[0] - 10, picbox.Height - (y * unidad[1]), centro[0] + 10, picbox.Height - (y * unidad[1]));//lineas eje y
-                areaFondo.DrawString("" + (y - (tamanio[1] / 2)), new Font("Arial", 10, FontStyle.Italic), Brushes.DarkBlue, centro[0], picbox.Height - (y * unidad[1]));
+                areaFondo.DrawLine(new Pen(Color.DarkBlue), centro.X - 10, picbox.Height - (y * unidad.Y), centro.X + 10, picbox.Height - (y * unidad.Y));//lineas eje y
+                areaFondo.DrawString("" + (y - (tamanio.Y / 2)), new Font("Arial", 10, FontStyle.Italic), Brushes.DarkBlue, centro.X, picbox.Height - (y * unidad.Y));
             }
         }
 
@@ -93,20 +91,21 @@ namespace Perceptron
 
         private void Reset_Click(object sender, EventArgs e)
         {
-            p = null;
-            a = null;
-            elementos = new List<Elemento>();
-            entrenado = false;
-
+            graficoError.Series["Error Adaline ECM"].Points.Clear();
+            graficoError.Series["Error Perceptrón"].Points.Clear();
+            patrones = new List<Patron>();
+            entrenado = flagPesos = false;
+            p = a = null;
             resizePic();
         }
+       
         private void picbox_MouseClick(object sender, MouseEventArgs e)
         {
-            List<float> aux = ReAEs(new List<float> { e.X, e.Y});
-            List<double> caracteristicas = new List<double> { aux[0], aux[1], -1};
+            PointF aux = ReAEs(new PointF (e.X, e.Y));
+            List<double> atributo = new List<double> { aux.X, aux.Y, -1};
             if (entrenado)
             {
-                int ans = a.Supocision(caracteristicas);
+                int ans = a.Prediccion(atributo);
                 if (ans == 1)
                     areaFondo.FillRectangle(Brushes.Blue, e.X - radio, e.Y - radio, radio * 2, radio * 2);
                 else
@@ -115,11 +114,11 @@ namespace Perceptron
                 return;
             }
             if (e.Button.Equals(MouseButtons.Right)) {
-                elementos.Add(new Elemento(caracteristicas, 1));
+                patrones.Add(new Patron(atributo, 1));
                 areaFondo.FillRectangle(Brushes.Blue, e.X - radio, e.Y - radio, radio * 2, radio * 2);
             }
             else if (e.Button.Equals(MouseButtons.Left)) {
-                elementos.Add(new Elemento(caracteristicas, -1));
+                patrones.Add(new Patron(atributo, -1));
                 areaFondo.FillEllipse(Brushes.Red, e.X - radio, e.Y - radio, radio * 2, radio * 2);
             }
             picbox.Refresh();
@@ -128,96 +127,63 @@ namespace Perceptron
         #region Inicializa pesos, Perceptron y Adaline
         public double Random(int lim)
         {
-            return (double)(r.Next(11) + r.NextDouble()+(r.Next(1)*-1));
+            double aux = (r.Next(lim) + r.NextDouble());
+            return r.Next(2) == 1 ? aux: -aux;
         }
         private void IniciarPesos_Click(object sender, EventArgs e)
         {
-            p = new Perceptron(new List<double> { Random(11), Random(11), Random(11)});//inicializa los pesos
-            a = new Perceptron(new List<double>{ Random(11), Random(11), Random(11)});//inicializa los pesos
-            DibujaRecta();
+            int lim = 10;
+            p = new Perceptron(new List<double> { Random(lim), Random(lim), Random(lim) });//inicializa los pesos
+            a = new Perceptron(new List<double>{ Random(lim), Random(lim), Random(lim) });//inicializa los pesos
             flagPesos = true;
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            flagPesos = true;
-
-            List<float> aux = EsARe(new List<float> { -1, -1 });
-            elementos.Add(new Elemento(new List<double> { -1, -1, -1}, -1));
-            areaFondo.FillRectangle(Brushes.Blue, aux[0] - radio, aux[1] - radio, radio * 2, radio * 2);
-
-            aux = EsARe(new List<float> { 1, -1 });
-            elementos.Add(new Elemento(new List<double> { 1, -1, -1 }, 1));
-            areaFondo.FillRectangle(Brushes.Red, aux[0] - radio, aux[1] - radio, radio * 2, radio * 2);
-
-            aux = EsARe(new List<float> { 1, 1 });
-            elementos.Add(new Elemento(new List<double> { 1, 1, -1 }, 1));
-            areaFondo.FillRectangle(Brushes.Red, aux[0] - radio, aux[1] - radio, radio * 2, radio * 2);
-
-            aux = EsARe(new List<float> { -1, 1 });
-            elementos.Add(new Elemento(new List<double> { -1, 1, -1 }, 1));
-            areaFondo.FillRectangle(Brushes.Red, aux[0] - radio, aux[1] - radio, radio * 2, radio * 2);
-
-            p = new Perceptron(new List<double> { 1, 1, 0.5 });
-            p.learningRate = 0.25;
             DibujaRecta();
-
-            if (!flagPesos) return;
-            bool needFix = true;
-            for (int gen = 0, genLim = (int)nudGen.Value, error; gen < genLim && needFix; ++gen)
-            {
-                needFix = false;
-                foreach (Elemento elemento in elementos)
-                {
-                    error = elemento.clase - p.Supocision(elemento.caracteristicas);
-                    if (error != 0)
-                    {
-                        needFix = true;
-                        p.ActualizaPesos(error, elemento.caracteristicas);
-                        DibujaRecta();
-                    }
-                }
-            }
         }
-
         private void btnPerceptron_Click(object sender, EventArgs e)
         {
             if (!flagPesos) return;
             p.learningRate = (double)nudLR.Value;
             bool needFix = true;
-            for (int gen = 0, genLim = (int)nudGen.Value, error; gen < genLim && needFix; ++gen)
+            for (int gen = 1, genLim = (int)nudGen.Value, contE, error; gen <= genLim && needFix; ++gen)
             {
                 needFix = false;
-                foreach (Elemento elemento in elementos)
+                contE = 0;
+                foreach (Patron patron in patrones)
                 {
-                    error = elemento.clase - p.Supocision(elemento.caracteristicas);
+                    error = patron.objetivo - p.Prediccion(patron.atributo);
                     if (error != 0)
                     {
+                        contE++;
                         needFix = true;
-                        p.ActualizaPesos(error, elemento.caracteristicas);
+                        p.UpdateWP(error, patron.atributo);
                         DibujaRecta();
                     }
                 }
+                graficoError.Series["Error Perceptrón"].Points.AddXY("Generación: " + gen, contE);
+                graficoError.Update();
             }
+            if (!needFix) MessageBox.Show("El perceptrón llegó a una solución");
+            else MessageBox.Show("El perceptrón no llegó a una solución");
         }
         private void btnAdaline_Click(object sender, EventArgs e)
         {
             if (!flagPesos) return;
-            a.learningRate = (double)nudLR.Value;
-            bool needFix = true;
-            for (int gen = 0, genLim = (int)nudGen.Value, error; gen < genLim && needFix; ++gen)
+            a.learningRate = (double)nudLR.Value * 2.0;
+            double epsilon = (double)nudError.Value, error, eAcum = 1, Fy;
+            int genLim = (int)nudGen.Value;
+            for(int gen = 1; (gen <= genLim) && (eAcum > epsilon); ++gen)
             {
-                needFix = false;
-                foreach (Elemento elemento in elementos)
+                eAcum = 0;
+                foreach(Patron patron in patrones)
                 {
-                    error = elemento.clase - a.Supocision(elemento.caracteristicas);
-                    if (error != 0)
-                    {
-                        needFix = true;
-                        a.ActualizaPesos(error, elemento.caracteristicas);
-                        DibujaRecta();
-                    }
+                    Fy = a.Siglog(a.SumWX(patron.atributo));
+                    error = (double)patron.objetivo - Fy;
+                    a.UpdateWA(patron.atributo, error, Fy);
+                    eAcum += error * error * 0.5;
+                    DibujaRecta();
                 }
+                eAcum /= patrones.Count;
+                graficoError.Series["Error Adaline ECM"].Points.AddXY("Generación: " + gen, eAcum);
+                graficoError.Update();
             }
             entrenado = true;
         }
@@ -225,15 +191,18 @@ namespace Perceptron
         public void DibujaRecta()
         {
             areaDibujo.Clear(Color.Transparent);
+            PointF p0, p1;
             if (p != null)
             {
-                List<float> p0 = EsARe(new List<float> { -5, (float)p.evalua(-5) }), p1 = EsARe(new List<float> { 5, (float)p.evalua(5) });
-                areaDibujo.DrawLine(new Pen(Color.DarkSlateBlue), p0[0], p0[1], p1[0], p1[1]);
+                p0 = EsARe(new PointF ( -5, p.Evalua(-5) ));
+                p1 = EsARe(new PointF ( 5, p.Evalua(5) ));
+                areaDibujo.DrawLine(new Pen(Color.DarkSlateBlue), p0.X, p0.Y, p1.X, p1.Y);
             }
             if (a != null)
             {
-                List<float> p0 = EsARe(new List<float> { -5, (float)a.evalua(-5)}), p1 = EsARe(new List<float> {5, (float)a.evalua(5)});
-                areaDibujo.DrawLine(new Pen(Color.DarkSalmon), p0[0], p0[1], p1[0], p1[1]);
+                p0 = EsARe(new PointF(-5, a.Evalua(-5)));
+                p1 = EsARe(new PointF(5, a.Evalua(5)));
+                areaDibujo.DrawLine(new Pen(Color.DarkSalmon), p0.X, p0.Y, p1.X, p1.Y);
             }
             picbox.Refresh();
         }
@@ -241,13 +210,13 @@ namespace Perceptron
         #endregion region
 
         #region Escala
-        List<float> ReAEs(List<float> punto)//real a escala
+        PointF ReAEs(PointF punto)//real a escala
         {
-            return new List<float> { (punto[0] - centro[0]) / unidad[0], (punto[1] - centro[1]) / -unidad[1] };
+            return new PointF ( (punto.X - centro.X) / unidad.X, (punto.Y - centro.Y) / -unidad.Y );
         }
-        List<float> EsARe(List<float> punto)//escala a real
+        PointF EsARe(PointF punto)//escala a real
         {
-            return new List<float> { centro[0] + (unidad[0] * punto[0]), centro[1] + (unidad[1] * -punto[1]) };
+            return new PointF ( centro.X + (unidad.X * punto.X), centro.Y + (unidad.Y * -punto.Y) );
         }
         #endregion
     }

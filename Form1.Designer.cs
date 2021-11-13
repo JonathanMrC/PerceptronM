@@ -29,15 +29,16 @@ namespace Perceptron
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.graficoError = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.tablaSeparacion = new System.Windows.Forms.TableLayoutPanel();
             this.pnlParametros = new System.Windows.Forms.Panel();
             this.label3 = new System.Windows.Forms.Label();
-            this.NUDError = new System.Windows.Forms.NumericUpDown();
+            this.nudError = new System.Windows.Forms.NumericUpDown();
             this.btnAdaline = new System.Windows.Forms.Button();
             this.btnPerceptron = new System.Windows.Forms.Button();
             this.Reset = new System.Windows.Forms.Button();
@@ -47,12 +48,11 @@ namespace Perceptron
             this.nudLR = new System.Windows.Forms.NumericUpDown();
             this.IniciarPesos = new System.Windows.Forms.Button();
             this.picbox = new System.Windows.Forms.PictureBox();
-            this.button1 = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.graficoError)).BeginInit();
             this.tablaSeparacion.SuspendLayout();
             this.pnlParametros.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.NUDError)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudError)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudGen)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudLR)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picbox)).BeginInit();
@@ -75,18 +75,27 @@ namespace Perceptron
             // 
             // graficoError
             // 
-            chartArea3.Name = "ChartArea1";
-            this.graficoError.ChartAreas.Add(chartArea3);
+            chartArea2.Name = "ChartArea1";
+            this.graficoError.ChartAreas.Add(chartArea2);
             this.graficoError.Dock = System.Windows.Forms.DockStyle.Fill;
-            legend3.Name = "Legend1";
-            this.graficoError.Legends.Add(legend3);
+            legend2.Name = "Legend1";
+            this.graficoError.Legends.Add(legend2);
             this.graficoError.Location = new System.Drawing.Point(3, 363);
             this.graficoError.Name = "graficoError";
-            this.graficoError.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.SeaGreen;
+            this.graficoError.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.None;
+            this.graficoError.PaletteCustomColors = new System.Drawing.Color[] {
+        System.Drawing.Color.DarkSlateBlue,
+        System.Drawing.Color.Salmon};
             series3.ChartArea = "ChartArea1";
+            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.SplineArea;
             series3.Legend = "Legend1";
-            series3.Name = "Series1";
+            series3.Name = "Error Perceptrón";
+            series4.ChartArea = "ChartArea1";
+            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.SplineArea;
+            series4.Legend = "Legend1";
+            series4.Name = "Error Adaline ECM";
             this.graficoError.Series.Add(series3);
+            this.graficoError.Series.Add(series4);
             this.graficoError.Size = new System.Drawing.Size(794, 84);
             this.graficoError.TabIndex = 8;
             this.graficoError.Text = "chart1";
@@ -109,9 +118,8 @@ namespace Perceptron
             // 
             // pnlParametros
             // 
-            this.pnlParametros.Controls.Add(this.button1);
             this.pnlParametros.Controls.Add(this.label3);
-            this.pnlParametros.Controls.Add(this.NUDError);
+            this.pnlParametros.Controls.Add(this.nudError);
             this.pnlParametros.Controls.Add(this.btnAdaline);
             this.pnlParametros.Controls.Add(this.btnPerceptron);
             this.pnlParametros.Controls.Add(this.Reset);
@@ -137,30 +145,30 @@ namespace Perceptron
             this.label3.TabIndex = 9;
             this.label3.Text = "Error ";
             // 
-            // NUDError
+            // nudError
             // 
-            this.NUDError.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.NUDError.DecimalPlaces = 3;
-            this.NUDError.Increment = new decimal(new int[] {
+            this.nudError.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.nudError.DecimalPlaces = 3;
+            this.nudError.Increment = new decimal(new int[] {
             1,
             0,
             0,
             131072});
-            this.NUDError.Location = new System.Drawing.Point(85, 66);
-            this.NUDError.Maximum = new decimal(new int[] {
+            this.nudError.Location = new System.Drawing.Point(85, 66);
+            this.nudError.Maximum = new decimal(new int[] {
             9,
             0,
             0,
             65536});
-            this.NUDError.Minimum = new decimal(new int[] {
+            this.nudError.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             196608});
-            this.NUDError.Name = "NUDError";
-            this.NUDError.Size = new System.Drawing.Size(64, 20);
-            this.NUDError.TabIndex = 2;
-            this.NUDError.Value = new decimal(new int[] {
+            this.nudError.Name = "nudError";
+            this.nudError.Size = new System.Drawing.Size(64, 20);
+            this.nudError.TabIndex = 2;
+            this.nudError.Value = new decimal(new int[] {
             1,
             0,
             0,
@@ -196,12 +204,15 @@ namespace Perceptron
             // Reset
             // 
             this.Reset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.Reset.BackColor = System.Drawing.Color.Firebrick;
+            this.Reset.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Reset.ForeColor = System.Drawing.Color.White;
             this.Reset.Location = new System.Drawing.Point(7, 334);
             this.Reset.Name = "Reset";
             this.Reset.Size = new System.Drawing.Size(141, 23);
             this.Reset.TabIndex = 6;
             this.Reset.Text = "Reiniciar";
-            this.Reset.UseVisualStyleBackColor = true;
+            this.Reset.UseVisualStyleBackColor = false;
             this.Reset.Click += new System.EventHandler(this.Reset_Click);
             // 
             // label2
@@ -284,12 +295,15 @@ namespace Perceptron
             // IniciarPesos
             // 
             this.IniciarPesos.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.IniciarPesos.BackColor = System.Drawing.Color.Gray;
+            this.IniciarPesos.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.IniciarPesos.ForeColor = System.Drawing.Color.White;
             this.IniciarPesos.Location = new System.Drawing.Point(8, 103);
             this.IniciarPesos.Name = "IniciarPesos";
             this.IniciarPesos.Size = new System.Drawing.Size(141, 23);
             this.IniciarPesos.TabIndex = 3;
             this.IniciarPesos.Text = "Iniciar pesos";
-            this.IniciarPesos.UseVisualStyleBackColor = true;
+            this.IniciarPesos.UseVisualStyleBackColor = false;
             this.IniciarPesos.Click += new System.EventHandler(this.IniciarPesos_Click);
             // 
             // picbox
@@ -302,17 +316,6 @@ namespace Perceptron
             this.picbox.TabIndex = 1;
             this.picbox.TabStop = false;
             this.picbox.MouseClick += new System.Windows.Forms.MouseEventHandler(this.picbox_MouseClick);
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(73, 305);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 10;
-            this.button1.Text = "Prueba";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Visible = false;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // Form1
             // 
@@ -330,7 +333,7 @@ namespace Perceptron
             this.tablaSeparacion.ResumeLayout(false);
             this.pnlParametros.ResumeLayout(false);
             this.pnlParametros.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.NUDError)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudError)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudGen)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudLR)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picbox)).EndInit();
@@ -354,8 +357,7 @@ namespace Perceptron
         private System.Windows.Forms.Button IniciarPesos;
         private System.Windows.Forms.PictureBox picbox;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.NumericUpDown NUDError;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.NumericUpDown nudError;
     }
 }
 
