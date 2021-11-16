@@ -29,10 +29,10 @@ namespace Perceptron
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.graficoError = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.tablaSeparacion = new System.Windows.Forms.TableLayoutPanel();
@@ -75,27 +75,27 @@ namespace Perceptron
             // 
             // graficoError
             // 
-            chartArea2.Name = "ChartArea1";
-            this.graficoError.ChartAreas.Add(chartArea2);
+            chartArea1.Name = "ChartArea1";
+            this.graficoError.ChartAreas.Add(chartArea1);
             this.graficoError.Dock = System.Windows.Forms.DockStyle.Fill;
-            legend2.Name = "Legend1";
-            this.graficoError.Legends.Add(legend2);
+            legend1.Name = "Legend1";
+            this.graficoError.Legends.Add(legend1);
             this.graficoError.Location = new System.Drawing.Point(3, 363);
             this.graficoError.Name = "graficoError";
             this.graficoError.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.None;
             this.graficoError.PaletteCustomColors = new System.Drawing.Color[] {
         System.Drawing.Color.DarkSlateBlue,
         System.Drawing.Color.Salmon};
-            series3.ChartArea = "ChartArea1";
-            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.SplineArea;
-            series3.Legend = "Legend1";
-            series3.Name = "Error Perceptrón";
-            series4.ChartArea = "ChartArea1";
-            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.SplineArea;
-            series4.Legend = "Legend1";
-            series4.Name = "Error Adaline ECM";
-            this.graficoError.Series.Add(series3);
-            this.graficoError.Series.Add(series4);
+            series1.ChartArea = "ChartArea1";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.SplineArea;
+            series1.Legend = "Legend1";
+            series1.Name = "Error Perceptrón";
+            series2.ChartArea = "ChartArea1";
+            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.SplineArea;
+            series2.Legend = "Legend1";
+            series2.Name = "Error Adaline ECM";
+            this.graficoError.Series.Add(series1);
+            this.graficoError.Series.Add(series2);
             this.graficoError.Size = new System.Drawing.Size(794, 84);
             this.graficoError.TabIndex = 8;
             this.graficoError.Text = "chart1";
@@ -258,7 +258,7 @@ namespace Perceptron
             this.nudGen.Size = new System.Drawing.Size(64, 20);
             this.nudGen.TabIndex = 1;
             this.nudGen.Value = new decimal(new int[] {
-            1000,
+            300,
             0,
             0,
             0});

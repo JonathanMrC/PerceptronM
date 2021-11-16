@@ -19,6 +19,7 @@ namespace Perceptron
         const int radio = 10;
         Bitmap btmpD, btmpF;
         Perceptron p, a;
+        int contGenP, contGenA;
         Random r;
 
         public Form1()
@@ -26,6 +27,7 @@ namespace Perceptron
             InitializeComponent();
             r = new Random(DateTime.Now.Second *41 *DateTime.Now.Millisecond * 67);
             entrenado = flagPesos = false;
+            contGenA = contGenP = 1;
             patrones = new List<Patron>();
             resizePic();
         }
@@ -96,6 +98,7 @@ namespace Perceptron
             patrones = new List<Patron>();
             entrenado = flagPesos = false;
             p = a = null;
+            contGenA = contGenP = 1;
             resizePic();
         }
        
@@ -106,7 +109,7 @@ namespace Perceptron
             if (entrenado)
             {
                 int ans = a.Prediccion(atributo);
-                if (ans == 1)
+                if (ans == 1.0)
                     areaFondo.FillRectangle(Brushes.Blue, e.X - radio, e.Y - radio, radio * 2, radio * 2);
                 else
                     areaFondo.FillEllipse(Brushes.Red, e.X - radio, e.Y - radio, radio * 2, radio * 2);
@@ -114,11 +117,11 @@ namespace Perceptron
                 return;
             }
             if (e.Button.Equals(MouseButtons.Right)) {
-                patrones.Add(new Patron(atributo, 1));
+                patrones.Add(new Patron(atributo, 1.0));
                 areaFondo.FillRectangle(Brushes.Blue, e.X - radio, e.Y - radio, radio * 2, radio * 2);
             }
             else if (e.Button.Equals(MouseButtons.Left)) {
-                patrones.Add(new Patron(atributo, -1));
+                patrones.Add(new Patron(atributo, -1.0));
                 areaFondo.FillEllipse(Brushes.Red, e.X - radio, e.Y - radio, radio * 2, radio * 2);
             }
             picbox.Refresh();
@@ -143,13 +146,13 @@ namespace Perceptron
             if (!flagPesos) return;
             p.learningRate = (double)nudLR.Value;
             bool needFix = true;
-            for (int gen = 1, genLim = (int)nudGen.Value, contE, error; gen <= genLim && needFix; ++gen)
+            for (int gen = 1, genLim = (int)nudGen.Value, contE, error; gen <= genLim && needFix; ++gen, ++contGenP)
             {
                 needFix = false;
                 contE = 0;
                 foreach (Patron patron in patrones)
                 {
-                    error = patron.objetivo - p.Prediccion(patron.atributo);
+                    error = (int)patron.objetivo - p.Prediccion(patron.atributo);
                     if (error != 0)
                     {
                         contE++;
@@ -158,7 +161,7 @@ namespace Perceptron
                         DibujaRecta();
                     }
                 }
-                graficoError.Series["Error Perceptrón"].Points.AddXY("Generación: " + gen, contE);
+                graficoError.Series["Error Perceptrón"].Points.AddXY("Generación: " + contGenP, contE);
                 graficoError.Update();
             }
             if (!needFix) MessageBox.Show("El perceptrón llegó a una solución");
@@ -170,22 +173,21 @@ namespace Perceptron
             a.learningRate = (double)nudLR.Value * 2.0;
             double epsilon = (double)nudError.Value, error, eAcum = 1, Fy;
             int genLim = (int)nudGen.Value;
-            for(int gen = 1; (gen <= genLim) && (eAcum > epsilon); ++gen)
+            for(int gen = 1; (gen <= genLim) && (eAcum > epsilon); ++gen, ++contGenA)
             {
                 eAcum = 0;
                 foreach(Patron patron in patrones)
                 {
-                    Fy = a.Siglog(a.SumWX(patron.atributo));
-                    error = (double)patron.objetivo - Fy;
+                    Fy = a.Tanh(a.SumWX(patron.atributo));//uso tanh porque las clases son 1 y -1
+                    error = patron.objetivo - Fy;
                     a.UpdateWA(patron.atributo, error, Fy);
-                    eAcum += error * error * 0.5;
+                    eAcum += error * error;
                     DibujaRecta();
                 }
                 eAcum /= patrones.Count;
-                graficoError.Series["Error Adaline ECM"].Points.AddXY("Generación: " + gen, eAcum);
+                graficoError.Series["Error Adaline ECM"].Points.AddXY("Generación: " + contGenA, eAcum);
                 graficoError.Update();
             }
-            entrenado = true;
         }
 
         public void DibujaRecta()
@@ -212,11 +214,11 @@ namespace Perceptron
         #region Escala
         PointF ReAEs(PointF punto)//real a escala
         {
-            return new PointF ( (punto.X - centro.X) / unidad.X, (punto.Y - centro.Y) / -unidad.Y );
+            return new PointF ( (punto.X - centro.X) / unidad.X, (punto.Y - centro.Y) / unidad.Y );
         }
         PointF EsARe(PointF punto)//escala a real
         {
-            return new PointF ( centro.X + (unidad.X * punto.X), centro.Y + (unidad.Y * -punto.Y) );
+            return new PointF ( centro.X + (unidad.X * punto.X), centro.Y + (unidad.Y * punto.Y) );
         }
         #endregion
     }
